@@ -1,9 +1,6 @@
 package com.myapp.tests;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +36,27 @@ public class P03_LocatorsAndText {
         page.navigate("https://practice.cydeo.com/");
         page.click("text=A/B Testing");
         Assertions.assertEquals("No A/B Test", page.title());
+
+        page.close();
+        browser.close();
+        playwright.close();
+
+    }
+
+    @Test
+    void test03() {
+
+        Playwright playwright = Playwright.create();
+        Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+        Page page = browser.newPage();
+
+        page.navigate("https://google.com/");
+        Locator searchBox = page.locator("textarea[name='q']");
+//        searchBox.fill("Playwright");
+        searchBox.pressSequentially("Playwright", new Locator.PressSequentiallyOptions().setDelay(100));
+
+        Keyboard keyboard = page.keyboard();
+        keyboard.press("Enter");
 
         page.close();
         browser.close();
